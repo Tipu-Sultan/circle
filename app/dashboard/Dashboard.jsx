@@ -1,11 +1,10 @@
 "use client";
 import { useUsers } from "@/hooks/useUsers";
 import { useSession } from "next-auth/react";
-import FollowButton from "../follow/FollowButton";
+import FollowButton from "../../components/follow/FollowButton";
 
 const Dashboard = () => {
-  const { data: session, status } = useSession();
-  const { users, currentUser } = useUsers();
+  const { users, currentUser,status } = useUsers();
   
 
   if (status === "loading") return <p>Loading...</p>;
@@ -14,8 +13,8 @@ const Dashboard = () => {
   return (
     <div className="p-4 max-w-lg mx-auto">
       <h1 className="text-xl font-bold mb-4">Dashboard</h1>
-      <p>Welcome, {session?.user?.name}!</p>
-      <p>Email: {session?.user?.email}</p>
+      <p>Welcome, {currentUser?.name}!</p>
+      <p>Email: {currentUser?.email}</p>
 
       <h2 className="mt-6 text-lg font-semibold">Users</h2>
       <div className="mt-4 space-y-3">

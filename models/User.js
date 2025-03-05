@@ -21,6 +21,10 @@ const recentChatSchema = new mongoose.Schema(
       type: String, // Last message content
       default: "",
     },
+    avatar: {
+      type: String, // Last message content
+      default: "",
+    },
     unreadCount: {
       type: Number,
       default: 0, // Unread messages count
@@ -39,6 +43,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+    },
+    username: {
+      type: String,
+      default: "",
     },
     email: {
       type: String,

@@ -4,8 +4,8 @@ import { getAblyClient } from "@/lib/ablyClient";
 import {useRouter} from "next/navigation";
 
 const FollowButton = ({ userId,user, currentUser }) => {
-    const router = useRouter();
-  const [status, setStatus] = useState("Follow"); // Default state
+  const router = useRouter();
+  const [status, setStatus] = useState("Follow"); 
   const [loading, setLoading] = useState(true); // Track initial fetch
 
   if (!currentUser || !userId) return null; // Prevent errors if users aren't defined
@@ -173,20 +173,21 @@ const FollowButton = ({ userId,user, currentUser }) => {
         id: userId,
         name: user?.name,
         type: "user",
-        currentUserId: currentUser?.id, // Ensure the current user's ID is sent
+        avatar:'',
+        currentUserId: currentUser?.id, 
     };
 
     try {
         const response = await fetch("/api/auth/users", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(UserData), // Fix: Convert to JSON string
+            body: JSON.stringify(UserData), 
         });
 
         if (response.ok) {
             router.push("/chat");
         } else {
-            alert("Error adding recent chat.");
+          router.push("/chat");
         }
     } catch (error) {
         console.error("Error:", error);

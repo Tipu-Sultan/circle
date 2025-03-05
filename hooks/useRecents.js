@@ -20,5 +20,5 @@ export function useRecents() {
     if (currentUser?.id) fetchRecentChats();
   }, [currentUser]);
 
-  return { recentChats ,currentUser};
+  return { recentChats ,setRecentChats,currentUser};
 }

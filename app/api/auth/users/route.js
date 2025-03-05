@@ -3,6 +3,7 @@ import dbConnect from "@/lib/db";
 import AuthUser from "@/models/User";
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/authOptions';
+import IschatAlready from '@/utils/IsChatAlready';
 
 // GET /api/auth/users
 export async function GET(req) {
@@ -38,8 +39,9 @@ export async function GET(req) {
 export async function POST(req) {
     try {
         await dbConnect();
-        const { id, name, type, currentUserId } = await req.json();
+        const { id, name, type,avatar, currentUserId } = await req.json();
 
+        // Validate input
         if (!id || !name || !type || !currentUserId) {
             return NextResponse.json(
                 { message: "Missing required fields" },
@@ -47,30 +49,11 @@ export async function POST(req) {
             );
         }
 
-        // Find the current user
-        const currentUser = await AuthUser.findById(currentUserId);
-        if (!currentUser) {
-            return NextResponse.json(
-                { message: "User not found" },
-                { status: 404 }
-            );
-        }
+        // Call helper function to check and add recent chat
+        const result = await IschatAlready(id, name, type,avatar, currentUserId);
 
-        // Check if the chat already exists
-        const existingChat = currentUser.recentChats.find(
-            (chat) => chat.chatId?.toString() === id
-        );
-
-        if (!existingChat) {
-            // Add to recentChats
-            currentUser.recentChats.push({ chatId: id, name, type });
-            await currentUser.save();
-        }
-
-        return NextResponse.json(
-            { message: "Recent chat updated", recentChats: currentUser.recentChats },
-            { status: 200 }
-        );
+        // Return the response based on the result
+        return NextResponse.json(result.data, { status: result.status });
     } catch (error) {
         return NextResponse.json(
             { message: "Internal Server Error", error: error.message },
@@ -78,4 +61,5 @@ export async function POST(req) {
         );
     }
 }
+
 

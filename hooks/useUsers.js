@@ -3,7 +3,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 
 export function useUsers() {
-  const { data: session } = useSession();
+  const { data: session,status } = useSession();
   const currentUser = session?.user ?? null;
   const [users, setUsers] = useState([]);
 
